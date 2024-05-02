@@ -26,8 +26,28 @@ const App = () => {
     });
   };
 
+  const genresCall = async () => {
+    let promise = [];
+    let endPoint = ["tv", "movie"];
+    let allGenres = {};
+    endPoint.forEach((url) => {
+      return promise.push(fetchDataFromApi(`/genre/${url}/list`));
+    });
+    const data = await Promise.all(promise);
+    console.log(data);
+    data.map(({ genres }) => {
+      return genres.map((item) => {
+        allGenres[item.id] = item;
+      });
+    });
+
+    console.log(allGenres);
+    disptch(getGenres(allGenres));
+  };
+
   useEffect(() => {
     fetchApiConfig();
+    genresCall();
   }, []);
 
   return (
